@@ -88,4 +88,26 @@ else {
 }
 
 //getPOI -view data as GeoJSON
-client.open('GET','http://developer.cege.ucl.ac.uk:30271/getPOI');
+function showFormData() {
+		client.open('GET','http://developer.cege.ucl.ac.uk:30271/getPOI');
+		client.onreadystatechange = showFormDataResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
+		client.send();
+	}
+	// create the code to wait for the response from the data server, and process the response once it is received
+	function showFormDataResponse() {
+		// this function listens out for the server to say that the data is ready - i.e. has state 4
+	if (client.readyState == 4) {
+	// once the data is ready, process the data
+	var formData = client.responseText;
+	loadFormDatalayer(formData);
+	}
+	}
+	// convert the received data - which is text - to JSON format and add it to the map
+	function loadEarthquakelayer(formData) {
+	// convert the text to JSON
+	var formDatajson = JSON.parse(formData);
+	// add the JSON layer onto the map - it will appear using the default icons
+	formDatalayer = L.geoJson(formDatajson).addTo(mymap);
+	// change the map zoom so that all the data is shown
+	mymap.fitBounds(formDatalayer.getBounds());
+	}
