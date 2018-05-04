@@ -70,6 +70,8 @@ var fs = require('fs');
 		config[split[0].trim()] = split[1].trim();
 	}
 
+	var pg = require('pg');
+	var pool = new pg.Pool(config);
 	app.get('/postgistest', function (req,res) {
 		pool.connect(function(err,client,done) {
 			if(err){
