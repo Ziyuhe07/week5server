@@ -4,23 +4,6 @@ var path = require("path");
 var app = express();
 var fs = require('fs');
 
-	app.get('/postgistest', function (req,res) {
-		pool.connect(function(err,client,done) {
-			if(err){
-				console.log("not able to get connection "+ err);
-				res.status(400).send(err);
-				}
-				client.query('SELECT name FROM united_kingdom_counties'
-				,function(err,result) {
-					done();
-					if(err){
-						console.log(err);
-						res.status(400).send(err);
-						}
-						res.status(200).send(result.rows);
-					});
-				});
-			});
 
 	// adding functionality to allow cross-domain queries when PhoneGap is running a server
 	app.use(function(req, res, next) {
@@ -51,7 +34,33 @@ var fs = require('fs');
 		res.send("hello world from the HTTP server");
 	});
 
+	// read in the file and force it to be a string by adding “” at the beginning
+	var configtext = ""+fs.readFileSync("/home/studentuser/certs/postGISConnection.js");
+	//now cononvert the configruation file into the correct format -i.e. a name/value pair array
+	var configarray = configtext.split(",");
+	var config = {};
+	for (var i = 0; i < configarray.length; i++) {
+		var split = configarray[i].split(':');
+		config[split[0].trim()] = split[1].trim();
+	}
 
+	app.get('/postgistest', function (req,res) {
+		pool.connect(function(err,client,done) {
+			if(err){
+				console.log("not able to get connection "+ err);
+				res.status(400).send(err);
+				}
+				client.query('SELECT name FROM united_kingdom_counties'
+				,function(err,result) {
+					done();
+					if(err){
+						console.log(err);
+						res.status(400).send(err);
+						}
+						res.status(200).send(result.rows);
+					});
+				});
+			});
 	// the / indicates the path that you type into the server - in this case, what happens when you type in:  http://developer.cege.ucl.ac.uk:32560/xxxxx/xxxxx
   app.get('/:name1', function (req, res) {
   // run some server-side code
@@ -91,16 +100,6 @@ var fs = require('fs');
   res.sendFile(__dirname + '/'+req.params.name1+'/'+req.params.name2+ '/'+req.params.name3+"/"+req.params.name4);
 });
 
-	// read in the file and force it to be a string by adding “” at the beginning
-	var cononvert the configruation file into the correct format -i.e. a name/value pair array
-	var configarray = configtext.split(",");
-	var config = {};
-	for (var i = 0; i < configarray.length; i++) {
-		var split = configarray[i].split(':');
-		config[split[0].trim()] = split[1].trim();
-	}
 
-	var pg = require('pg');
-	var pool = new pg.Pool(config);
 
 	
