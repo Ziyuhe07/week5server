@@ -4,6 +4,24 @@ var path = require("path");
 var app = express();
 var fs = require('fs');
 
+	app.get('/postgistest', function (req,res) {
+		pool.connect(function(err,client,done) {
+			if(err){
+				console.log("not able to get connection "+ err);
+				res.status(400).send(err);
+				}
+				client.query('SELECT name FROM united_kingdom_counties'
+				,function(err,result) {
+					done();
+					if(err){
+						console.log(err);
+						res.status(400).send(err);
+						}
+						res.status(200).send(result.rows);
+					});
+				});
+			});
+
 	// adding functionality to allow cross-domain queries when PhoneGap is running a server
 	app.use(function(req, res, next) {
 		res.setHeader("Access-Control-Allow-Origin", "*");
@@ -74,8 +92,7 @@ var fs = require('fs');
 });
 
 	// read in the file and force it to be a string by adding “” at the beginning
-	var configtext =""+fs.readFileSync("/home/studentuser/certs/postGISConnection.js");
-	// now convert the configruation file into the correct format -i.e. a name/value pair array
+	var cononvert the configruation file into the correct format -i.e. a name/value pair array
 	var configarray = configtext.split(",");
 	var config = {};
 	for (var i = 0; i < configarray.length; i++) {
@@ -85,21 +102,5 @@ var fs = require('fs');
 
 	var pg = require('pg');
 	var pool = new pg.Pool(config);
+
 	
-	app.get('postgistest', function (req,res) {
-		pool.connect(function(err,client,done) {
-			if(err){
-				console.log("not able to get connection "+ err);
-				res.status(400).send(err);
-				}
-				client.query('SELECT name FROM united_kingdom_counties'
-				,function(err,result) {
-					done();
-					if(err){
-						console.log(err);
-						res.status(400).send(err);
-						}
-						res.status(200).send(result.rows);
-					});
-				});
-			});
