@@ -88,4 +88,4 @@ else {
 }
 
 //getPOI -view data as GeoJSON
-client.open('GET','http://developer.cege.ucl.ac.uk:30260/getPOI');
+client.open('GET','http://developer.cege.ucl.ac.uk:30271/getPOI');
