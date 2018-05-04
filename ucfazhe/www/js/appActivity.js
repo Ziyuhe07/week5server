@@ -20,6 +20,7 @@ function replaceGraphs() {
 	var formDatalayer;
 //getPOI -view data as GeoJSON
 	function showFormData() {
+		clientA = new XMLHttpRequest();
 		clientA.open('GET','http://developer.cege.ucl.ac.uk:30271/getPOI');
 		clientA.onreadystatechange = showFormDataResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
 		clientA.send();
