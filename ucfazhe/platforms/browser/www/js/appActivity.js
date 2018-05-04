@@ -42,8 +42,7 @@ function replaceGraphs() {
 	// change the map zoom so that all the data is shown
 	mymap.fitBounds(formDatalayer.getBounds());
 	}
-	// create a variable that will hold the XMLHttpRequest() - this must be done outside a function so that all the functions can use the same variable
-	var client;
+	
 	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
 	var earthquakelayer;
 	// create the code to get the Earthquakes data using an XMLHttpRequest
