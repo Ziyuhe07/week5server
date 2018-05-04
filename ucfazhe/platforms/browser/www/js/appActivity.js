@@ -86,7 +86,9 @@ else {
 	}
 }
 }
-
+	var client;
+	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
+	var formDatalayer;
 //getPOI -view data as GeoJSON
 function showFormData() {
 		client.open('GET','http://developer.cege.ucl.ac.uk:30271/getPOI');
@@ -103,7 +105,7 @@ function showFormData() {
 	}
 	}
 	// convert the received data - which is text - to JSON format and add it to the map
-	function loadEarthquakelayer(formData) {
+	function loadFormDatalayer(formData) {
 	// convert the text to JSON
 	var formDatajson = JSON.parse(formData);
 	// add the JSON layer onto the map - it will appear using the default icons
