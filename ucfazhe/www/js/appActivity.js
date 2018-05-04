@@ -15,6 +15,33 @@ function replaceGraphs() {
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(mymap);
+	var client;
+	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
+	var formDatalayer;
+//getPOI -view data as GeoJSON
+	function showFormData() {
+		client.open('GET','http://developer.cege.ucl.ac.uk:30271/getPOI');
+		client.onreadystatechange = showFormDataResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
+		client.send();
+	}
+	// create the code to wait for the response from the data server, and process the response once it is received
+	function showFormDataResponse() {
+		// this function listens out for the server to say that the data is ready - i.e. has state 4
+	if (client.readyState == 4) {
+	// once the data is ready, process the data
+	var formData = client.responseText;
+	loadFormDatalayer(formData);
+	}
+	}
+	// convert the received data - which is text - to JSON format and add it to the map
+	function loadFormDatalayer(formData) {
+	// convert the text to JSON
+	var formDatajson = JSON.parse(formData);
+	// add the JSON layer onto the map - it will appear using the default icons
+	formDatalayer = L.geoJson(formDatajson).addTo(mymap);
+	// change the map zoom so that all the data is shown
+	mymap.fitBounds(formDatalayer.getBounds());
+	}
 	// create a variable that will hold the XMLHttpRequest() - this must be done outside a function so that all the functions can use the same variable
 	var client;
 	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
@@ -86,30 +113,4 @@ else {
 	}
 }
 }
-	var client;
-	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
-	var formDatalayer;
-//getPOI -view data as GeoJSON
-function showFormData() {
-		client.open('GET','http://developer.cege.ucl.ac.uk:30271/getPOI');
-		client.onreadystatechange = showFormDataResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
-		client.send();
-	}
-	// create the code to wait for the response from the data server, and process the response once it is received
-	function showFormDataResponse() {
-		// this function listens out for the server to say that the data is ready - i.e. has state 4
-	if (client.readyState == 4) {
-	// once the data is ready, process the data
-	var formData = client.responseText;
-	loadFormDatalayer(formData);
-	}
-	}
-	// convert the received data - which is text - to JSON format and add it to the map
-	function loadFormDatalayer(formData) {
-	// convert the text to JSON
-	var formDatajson = JSON.parse(formData);
-	// add the JSON layer onto the map - it will appear using the default icons
-	formDatalayer = L.geoJson(formDatajson).addTo(mymap);
-	// change the map zoom so that all the data is shown
-	mymap.fitBounds(formDatalayer.getBounds());
-	}
+	
