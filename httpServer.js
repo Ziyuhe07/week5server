@@ -83,7 +83,7 @@ var app = express();
 	}
 
 	var pg = require('pg');
-	var pool = new pg.Pool(config
+	var pool = new pg.Pool(config);
 	
 	app.get('postgistest', function (req,res) {
 		pool.connect(function(err,client,done) {
