@@ -73,6 +73,10 @@ app.use(bodyParser.json());
 					console.log("not able to get connection "+ err);
 					res.status(400).send(err);
 				}
+				// pull the geometry component together
+				// note that well known text requires the points as longitude/latitude !
+				// well known text should look like: 'POINT(-71.064544 42.28787)'
+				var geometrystring = "st_geomfromtext('POINT(" + req.body.longitude + " " + req.body.latitude + ")'";
 				var querystring = "INSERT into formdata (name,surname,module,language, modulelist, lecturetime) values ('";
 				querystring = querystring + req.body.name + "','" + req.body.surname + "','" + req.body.module + "','";
 				querystring = querystring + req.body.language + "','" + req.body.modulelist + "','" + req.body.lecturetime+"')";
@@ -83,7 +87,7 @@ app.use(bodyParser.json());
 						console.log(err);
 						res.status(400).send(err);
 						}
-						res.status(200).send("row inserted");
+						res.status(200).send("Information inserted");
 					});
 				});
 			});
