@@ -26,6 +26,7 @@ function startDataUpload() {
 	var latitude = document.getElementById("latitude").value;
 	var longitude = document.getElementById("longitude").value;
 	postString = postString + "&latitude=" + latitude + "&longitude=" + longitude;
+	
 	postString = postString + "&modulelist="+checkString;
 
 // now get the radio button values
